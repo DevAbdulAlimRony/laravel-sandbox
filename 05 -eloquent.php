@@ -110,3 +110,12 @@ $user = User::updateOrCreate(
 //Multiple upsert in a single query: User::upsert()
 
 //Deleting Models
+$user = User::find(1);
+$user->delete();
+User::truncate();
+
+//Deleting using Primary Key
+User::destroy(1);
+User::destroy(1, 2, 3);
+User::destroy([1, 2, 3]);
+User::destroy(collect([1, 2, 3]));
