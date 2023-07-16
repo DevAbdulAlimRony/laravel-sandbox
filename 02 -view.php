@@ -1,5 +1,5 @@
 <?php
-
+//Laravel Blade Templating Engine
 //Eco Vars and Methods 
 {{ $name }}
 {{ time() }}

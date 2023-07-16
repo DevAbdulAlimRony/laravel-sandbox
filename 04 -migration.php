@@ -1,7 +1,7 @@
 <?php
 /*
 |--------------------------------------------------------------------------
-| Migration Artisan Commands
+| Migration: Version Controlling of Database
 |--------------------------------------------------------------------------
 |
 | 1. New Migration: php artisan make:migration create_users_table, custom path: use --path
