@@ -20,7 +20,7 @@ class Mobile extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
-        //Explicit as above
+        //Explicitly as above
     }
 }
 
