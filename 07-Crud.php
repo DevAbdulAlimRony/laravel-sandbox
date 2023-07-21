@@ -33,3 +33,66 @@ Route::singleton('profile', ProfileController::class)->creatable();
 Route::singleton('profile', ProfileController::class)->destroyable();
 
 
+
+//File Upload
+$path = $request->file('name')->store('location'); //or,
+$path = Storage::putFile('location', $request->file('name'));
+$path = $request->file('name')->storeAs('location', $request->user()->id); //or,
+$path = Storage::putFileAs('location', $request->file('name'), $request->user()->id);
+$path = Storage::putFile('/location'.$request->file('name'), 'disk');
+
+$file = $request->file('name');
+$name = $file->getClientOriginalName();
+$extension = $file->getClientOriginalExtension(); //Original Name Extension is unsafe, name can be malicious
+
+$name = $file->hasName(); //Unique Random Name(Safe)
+$extension = $file->extension(); //Determine extension
+//File Visibility: public, getVisibility(), setVisibility(), storePubliclyAs()
+Storage::delete('file_name');
+Storage::delete(['file1', 'file2']);
+Storage::disk('diskName')->delete('folder/file.jpg');
+
+//File Directories
+
+
+//Database Pagination: Configure Tailwind Content
+//Paginate Query Builder
+return view('user.index', [ 'users' => DB::table('users')->paginate(15)]);
+$users = DB::table('users')->simplePaginate(); //Next and Previous Just
+
+//Paginate Eloquent
+$user = User::paginate(15);
+$user = User::paginate(15)->withQueryString(); //parameter in the link
+$user = User::paginate(15)->fragment('user'); //Hash Fragment: #user in the link
+$user = User::simplePaginate(15);
+$user = User::cursorPaginate(15);
+$users = User::where('age', '>', 22)->paginate($perPage = 5, $columns = ['*'], $pageName = 'users');
+//Custom Pagination Manually
+//Pagination URL
+//Display: {{ $users->links() }}, {{ $users->onEachSide(5)->links() }}, {{ $paginator->links('view.name') }}
+//paginator methods
+
+
+//Form and HTML Class
+Form::open(array(url=>'', method=>'POST/GET/PUT/DELETE', route => 'name', action => 'Controller@method', files => true));
+Form::label('email', 'Your Email Address'); //Input Field Name: email
+Form::text('email', 'value');
+Form::password('password');
+Form::email();
+Form::file();
+Form::checkbox();
+Form::radio();
+Form::number();
+Form::select();
+Form::selectRange();
+Form::submit();
+Form::macro('', function(){}); //Custom Form Class
+Form::close();
+
+//Form Model Binding
+Form::model($user, array('route' => array('user.update', $user->id))) //Ex. User Model email and Input name email bind automatically
+
+
+
+
+
