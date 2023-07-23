@@ -129,3 +129,65 @@ if ($someCondition) {
 }
 $book->loadMissing('author'); //Load when It has not loaded already
 
+/*
+|--------------------------------------------------------------------------
+| Polymorphic Relation
+|--------------------------------------------------------------------------
+|
+| 1. Same Model belongs to Multiple Model
+| 2. Post and Video Model has Comment Model
+| 3. Comment Model: commentable_id (id of post or video), commentable_type(Post or Video Model's Class name)
+| 4. One of Many: Relation is One to Many, but want to retrieve one data of many. morphOne(), ofMany(), oldestOfMany(), latestOfMany()
+| 5. Many to Many: posts and videos have tags- taggables. morphToMany(), morphedByMany()
+| 6. We can store Morphed Model as custom name instead of storing full class. use enforceMorphMap() and assign into boot()
+*/
+//One to One
+//One to Many Morph
+use Illuminate\Database\Eloquent\Relations\MorphTo;
+class Comment extends Model{
+    public function commntable(): MorphTo{
+        return $this->morphTo();}
+    
+    public function commentable(): MorphTo{
+        return $this->morphTo(__FUNCTION__, 'type', 'commentable_id'); //Explicitly Defined
+    }
+    }
+
+use Illuminate\Database\Eloquent\Relations\MorphOne;
+class Post extends Model{
+    public function comments(): MorphMany{
+        return $this->morphMany(Comment::class, 'commentable');
+        //Same for Video Model
+        //One to One: morphOne
+}}
+$comment = Post::find(1)->comment; //Use for each for One to Many
+$commentable = Comment::find(1)->commentable;
+$alias = $post->getMorphClass();
+$class = Relation::getMorphedModel($alias);
+ 
+
+/*
+|--------------------------------------------------------------------------
+| Accessors: Data Manipulation When Accessed from Database
+| Accessor can work with multiple attributes fn(mixed, array) 
+| Caching: shouldCache(),withoutObjectCaching()
+| Mutator: Data Manipulation When it is set
+--------------------------------------------------------------------------
+*/
+
+class User extends Model{
+    protected function teacherName(): Attribute{
+        return Attribute::make(
+            get: fn (string $value) => ucfirst($value), //Accessor
+            set: fn (string $value) => strtolower($value), //Mutator
+        );
+    }
+}
+
+
+
+
+
+
+
+

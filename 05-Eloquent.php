@@ -119,3 +119,54 @@ User::destroy(1);
 User::destroy(1, 2, 3);
 User::destroy([1, 2, 3]);
 User::destroy(collect([1, 2, 3]));
+
+//If we do Route Model Binding and want slug rather than ID
+public function getRouteKeyName(): string{
+    return slug;
+}
+
+/*
+| Query Scopes:
+| 1. Global Scopes: php artisan:make scope  UserScope
+| 2. orWhere: local scop chaining
+*/
+public function apply(Builder $builder, Model $model): void{
+    $builder->where();
+}
+//Add in Model
+protected static function booted(): void{
+    static::addGlobalScope(new UserScope);
+}
+//Can Define Scope in addGlobalScope directly: Anonymous global scope
+User::all(); //with scope
+User::withOutGlobalScope(UserScope::class)->get();
+User::withoutGlobalScope('user')->get();
+User::withoutGlobalScopes()->get(); //Remove all scopes, or can be array
+
+//Local Scopes
+public function scopeLatestUser(Builder $query): void{
+    $query->where();
+}
+public function scopePopularUser(Builder $query, string $votes): void{
+    $query->where();
+}
+$users = User::latestUser()-get();
+$users = User::latestUser()->orWhere->popularUsers('vote')-get();
+
+/*
+| Soft Deletes:
+| 1. contains deleted_at attribute
+| 2. In Model: use softDeletes;
+| 3. In Migration: $table->softDeletes() or dropSoftDeletes()
+| 4. withTrashed(): force query to include softDeleted models
+*/
+if($user->trashed()){
+    $user->restore();
+}
+$user->withTrashed()->where()->restore();
+$user->onlyTrashed()->where()->get();
+$user->comments()->restore();
+$user->forceDelete(); //permanently delete
+
+
+

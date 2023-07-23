@@ -73,25 +73,6 @@ $users = User::where('age', '>', 22)->paginate($perPage = 5, $columns = ['*'], $
 //paginator methods
 
 
-//Form and HTML Class
-Form::open(array(url=>'', method=>'POST/GET/PUT/DELETE', route => 'name', action => 'Controller@method', files => true));
-Form::label('email', 'Your Email Address'); //Input Field Name: email
-Form::text('email', 'value');
-Form::password('password');
-Form::email();
-Form::file();
-Form::checkbox();
-Form::radio();
-Form::number();
-Form::select();
-Form::selectRange();
-Form::submit();
-Form::macro('', function(){}); //Custom Form Class
-Form::close();
-
-//Form Model Binding
-Form::model($user, array('route' => array('user.update', $user->id))) //Ex. User Model email and Input name email bind automatically
-
 
 
 

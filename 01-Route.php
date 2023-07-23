@@ -86,7 +86,39 @@ Route::group(['middleware'=>'auth'], function(){
         //Extra Method must be defined before the resource controller to work
     });
 
-});
+    Route::group(['middleware'=>'user', 'prefix'=> 'user', 'namespace' => 'User', 'as' => 'user.'], function(){
+        //Partial Resource Controller
+        Route::resource('admin', AdminController::class)->except('edit');
+        //->only()
+        //Extra Method must be defined before the resource controller to work
+    });
+
+}); //Route Parameter Validation
 
 //Soft Delete
 Route::get('/', function (){})->withTrashed();
+
+/*
+|--------------------------------------------------------------------------
+| Route Model Binding
+|--------------------------------------------------------------------------
+|
+| 1. Short Way to Find By ID. Typically Used in Edit or Show Method
+| 2. Instead of Finding ID, Just Pass argument show(User $user), edit(User $user)
+| 3. Explicit Binding in boot Method of Route Service Provider
+| 4. We can conditionally make our own customized route model binding like find this id if condition
+*/
+//Implicit Binding
+Route::get('users/{user}', function(User $user){}); //$user and {user} matches, withTrashed() for Soft Delete
+Route::get('users/{user:slug}', function(User $user){return $user;}); //Rather than ID - slug. If Define in Model, don't need :slug here
+Route::get('users/{user}/posts/{post:slug}', function(User $user, Post $post){}); //Gradually User, and the Post for relationship
+Route::get('users/{user}/posts/{post:slug}', function(User $user, Post $post){})->scopBindings(); //Scop Child Bindings, withoutScopBindings()
+Route::scopBindings()->group(function(){});
+Route::get('users/{user}', [LocationController::class, 'show'])->missing(function (Request $request){
+    return Redirect::route('error.index');
+});
+
+
+
+
+
