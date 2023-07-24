@@ -70,7 +70,5 @@ class UserFactory extends Factory{
     }
     
     //Factory Callbacks in configure():- afterMaking(): After calling Model before into Database -make(). afterCreating(): after saving to the database- create(), save()
-    
-
 
 }

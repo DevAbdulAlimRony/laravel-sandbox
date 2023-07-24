@@ -64,3 +64,39 @@ Route::get()->middleware('token'); //from aliases
 Route::get()->withoutMiddleware('token'); //When In a Middleware Group
 Route::withoutMiddleware();
 Route::get()->middleware([IsTokenInvalid::class, IsStudent::class]);
+
+
+/*
+|--------------------------------------------------------------------------
+| Layout Breeze
+|--------------------------------------------------------------------------
+|
+| 1. Table must have email_verified_at col
+| 2. Three Routing: Verification link, Page after Verification, Resend Verification Link
+| 3. Illuminate\Foundation\Auth\User, Illuminate\Auth\Events\Verified, Illuminate\Auth\Events\Registered
+*/
+use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Notifications\Notifiable;
+class User extends Authenticatable implements MustVerifyEmail
+{
+    use Notifiable;
+}
+//Verification Link
+Route::get('/email/verify', function () {
+    return view('auth.verify-email');
+})->middleware('auth')->name('verification.notice'); //verification.notice must not be changed
+
+//After Verification
+Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
+    $request->fulfill();
+    return redirect('/home');
+})->middleware(['auth', 'signed'])->name('verification.verify');
+
+//Resend Link
+Route::post('/email/verification-notification', function (Request $request) {
+    $request->user()->sendEmailVerificationNotification();
+    return back()->with('message', 'Verification link sent!');
+})->middleware(['auth', 'throttle:6,1'])->name('verification.send');
+
+//Now, Protect any routes by middleware(['auth', 'verified'])
+//Custom Message in AuthServiceProvider
