@@ -33,28 +33,6 @@ Route::singleton('profile', ProfileController::class)->creatable();
 Route::singleton('profile', ProfileController::class)->destroyable();
 
 
-
-//File Upload
-$path = $request->file('name')->store('location'); //or,
-$path = Storage::putFile('location', $request->file('name'));
-$path = $request->file('name')->storeAs('location', $request->user()->id); //or,
-$path = Storage::putFileAs('location', $request->file('name'), $request->user()->id);
-$path = Storage::putFile('/location'.$request->file('name'), 'disk');
-
-$file = $request->file('name');
-$name = $file->getClientOriginalName();
-$extension = $file->getClientOriginalExtension(); //Original Name Extension is unsafe, name can be malicious
-
-$name = $file->hasName(); //Unique Random Name(Safe)
-$extension = $file->extension(); //Determine extension
-//File Visibility: public, getVisibility(), setVisibility(), storePubliclyAs()
-Storage::delete('file_name');
-Storage::delete(['file1', 'file2']);
-Storage::disk('diskName')->delete('folder/file.jpg');
-
-//File Directories
-
-
 //Database Pagination: Configure Tailwind Content
 //Paginate Query Builder
 return view('user.index', [ 'users' => DB::table('users')->paginate(15)]);
