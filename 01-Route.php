@@ -18,8 +18,8 @@ Route::fallback(function () {});
 | 3. php artisan route:list --path=api
 | 4. php artisan route:list --except-vendor
 | 5. php artisan route:list --only-vendor
-| 6. php artisan route:cache
-| 7. php artisan route:clear
+| 6. php artisan route:cache - to deploy
+| 7. php artisan route:clear - to clear cache
 */
 
 //Redirect and View Routes
@@ -117,6 +117,25 @@ Route::scopBindings()->group(function(){});
 Route::get('users/{user}', [LocationController::class, 'show'])->missing(function (Request $request){
     return Redirect::route('error.index');
 });
+
+//Rate Limiting:Restrict amount of traffic for a given route/routes (RouteServiceProvider)
+//If exceed, 429 status code
+
+RateLimiter::for('global', function (Request $request){
+    return Limit::perMinute(1000)->response(function (Request $request, array $headers){
+        return response('Custom Message', 429, $headers);
+    });
+});
+
+RateLimiter::for('uploads', function(Request $request){
+    return $request->user()->isAdmin()
+           ? Limit::none()->by($request->user()->id)
+           : Limit::perMinute(100)->by($request(ip));
+}); //by means per ip address or per user here
+
+//Assign Rate Limiter to Route
+Route::middleware(['throttle:uploads']);
+
 
 
 
