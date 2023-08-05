@@ -72,3 +72,6 @@ class UserFactory extends Factory{
     //Factory Callbacks in configure():- afterMaking(): After calling Model before into Database -make(). afterCreating(): after saving to the database- create(), save()
 
 }
+
+//Raw Expressions/Query
+$users = DB::table('users')->select(DB::raw('count(*) as user_count, status'))->get();

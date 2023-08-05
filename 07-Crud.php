@@ -50,6 +50,14 @@ $users = User::where('age', '>', 22)->paginate($perPage = 5, $columns = ['*'], $
 //Display: {{ $users->links() }}, {{ $users->onEachSide(5)->links() }}, {{ $paginator->links('view.name') }}
 //paginator methods
 
+//Invokable Controller/Single Action Controller: When a Method does complex function, we can separate this method in a controller
+//php artisan make:controller ResultController --invokable
+Route::post('/result', ResultController::class);
+class ResultController extends Controller{
+    public function __invoke(){}
+}
+
+
 
 
 

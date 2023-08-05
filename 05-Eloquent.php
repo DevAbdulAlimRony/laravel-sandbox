@@ -4,8 +4,9 @@
 | ORM: Object Relational Model
 |--------------------------------------------------------------------------
 |
-| 1. Model with Migration: php artisan make:model User -migration/-m , --all, --policy, --factory, --controller, 
-|    --controller --resource
+| 1. Model with Migration: php artisan make:model User -migration/-m , --all/-a, --policy, --factory, --controller, 
+|    --controller --resource, -mcr (migration, resource controller with route model binding), -mcr --api, -mcr -R, -fs
+|  (factory and seeder)
 | 2. Overview of the Model: php artisan model:show User
 | 3. "Composite" primary keys are not supported by Eloquent models. 
 */
@@ -167,6 +168,30 @@ $user->withTrashed()->where()->restore();
 $user->onlyTrashed()->where()->get();
 $user->comments()->restore();
 $user->forceDelete(); //permanently delete
+
+/*
+|--------------------------------------------------------------------------
+| Observer
+|--------------------------------------------------------------------------
+|
+| 1. Observe if a model created, updated, deleted and perform operations if it happens 
+| 2. Update Related Data, Sending Notifications, Cache, Event Handling
+| 3. php artisan make:observer UserObserver --model=User 
+| 4. Assign observer in AppServiceProvider
+| 5. We can use isDirty() on updating method and wasChanged() on updated method
+| 6. withoutEvents(): muting events for a certain action
+| 7. deleteQuietly(), forceDeleteQuietly(), restoreQuietly(), saveQuietly() : No event for a Model
+*/
+public function boot(): void{
+    User::observe(UserObserver::class); //or,
+    User::class => [UserObserver::class],
+}
+class UserObserver{
+
+    //Operation after Created
+    public $afterCommit = true;
+}
+
 
 
 
