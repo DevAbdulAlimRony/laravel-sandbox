@@ -192,6 +192,135 @@ class UserObserver{
     public $afterCommit = true;
 }
 
+//Eloquent 20 Tips//
 
+// 1. Increment Decrement
+$article = Article::find($id)->increment('read_count');
+$article = Article::find($id)->increment('read_count', 10);
+$product = Product::find($id)->decreament('stock');
 
+//2: XorY
+$user = User::findOrFail($id);
+$user = User::firstOrCreate(['email' => $email]);
+
+//Model Boot Method
+public static function boot(){
+    parent::boot();
+    self::creating(function($model)){
+        $model->uuid = (string)Uuid::generate();
+
+    //always order by id
+    static::addGlobalScope('students', function(Builder $builder){
+        $builder->orderBy('id', 'asc');
+    });
+ }}
+
+//Relationship with Condition
+return $this->hasMany(ClassRepresentative::class)->where('is_cr', true)->orderBy('id');
+
+//Model Properties
+protected $table, $fillable, $dates, $appends, $primaryKey, $perPage;
+public $incrementing, $timestamps;
+const CREATED_AT, UPDATED_AT;
+
+//Multiple Entries
+$users = User::find([1, 2]);
+
+//whereField. Assume, we have an attribute isCr
+$users = User::whereIsCr(1)->get();
+//whereDate(), whereDay(), whereMonth(), whereYear()
+
+//Order By Relationship
+public function latestNotice(){
+    return $this->hasOne(Notice::class)->latest();
+}
+$notices = Admin::with('latestNotice')->get()->sortByDesc(latestPost.created_at);
+
+//End of If-else, use when
+$query = User::query();
+$query->when(request('role', false), function($q, $role){
+    return $q->where('rol_id', $role);
+});
+$authors = $query->get();
+
+//If Model Empty- typically throw error. We can use Default Value
+{{ $post->author->name ?? '' }} //or,
+public function author(){
+    return $this->belongsTo('User')->withDefault();
+    //withDefault(['name' => 'Dummy Name'])
+}
+
+//Raw Query: whereRaw(), havingRaw(), orderByRaw()
+
+//Duplicate a row
+$user = User::find(1);
+$newUser = $user->replicate();
+$newUser->save();
+
+//Chunking for big tables
+User::chunk(100, function($users){
+    foreach($users as $user){}
+    //first retrieve 100 data, process it, then again retrieve 100 data if needs
+});
+
+//override updated_at
+$user->update_at = '';
+$user->save(['timestamps' => false]);
+
+//update()
+$result = $users->whereNull('name')->update(['name' => 'no name']);
+
+//Complex Eloquent Query
+$q->where(function ($query){
+    $query->where('gender', 'male')->where('age', '>=', 18);
+})->orWhere(function ($query){
+    $query->where('gender', 'female')->where('age', '>=', 65);
+});
+
+//when performing some aggregation on data like max, min, avg- Grouping should be done on database level, not in php to get better performance and less model, less memory
+
+//Best Way to check Empty Collection: isEmpty(), isNotEmpty()
+//Refactoring to Collections//
+
+//map(): Going through each collection and transform into another
+const departments = ['communication science', 'information technology'];
+return collect(self::departments)->map(function ($department){ return Str::slug($department)})->toArray();
+
+//shortcut way- array function
+return collect(self::departments)
+    ->map(fn ($department) => Str::slug($department))
+    ->toArray();
+
+//two level each instead of foreach
+$tags = Tag::factory(10)->create();
+User::factory(20)->create()->each(function($user) use($tags){
+    Listing::factory(rand(1, 4))->create([
+        'user_id' => $user->id
+    ])->each(function($listing) use($tags){
+        $listing->tags()->attach($tags->random(2));
+    });
+});
+
+//Collection Pipelining (chaining)
+$result = $collection
+    ->filter(function ($item) {
+        // Filter only even numbers
+        return $item % 2 === 0;
+    })
+    ->map(function ($item) {
+        // Map to square each even number
+        return $item * $item;
+    });
+
+//Higher Order Messaging: directly accessing methods and properties of collection items using the arrow (->) notation
+// Before
+$employees->reject(function($employee) {
+    return $employee->retired;
+})->each(function($employee){
+    $employee->sendPayment();
+});
+ 
+// After using Higher Order Messaging for Collections
+$employees->reject->retired->each->sendPayment();
+$totalAmount = $orders->sum->amount;
 
