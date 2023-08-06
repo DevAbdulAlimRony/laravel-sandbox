@@ -100,3 +100,12 @@ Route::post('/email/verification-notification', function (Request $request) {
 
 //Now, Protect any routes by middleware(['auth', 'verified'])
 //Custom Message in AuthServiceProvider
+
+/*
+|--------------------------------------------------------------------------
+| Socialite
+|--------------------------------------------------------------------------
+|
+| 1. Social Login: Laravel supports facebook, twitter, linkedin, google, github, gitlab, bitbucket, slack
+| 2. composer require laravel/socialite
+*/
