@@ -6,9 +6,10 @@
 |
 | 1. Model with Migration: php artisan make:model User -migration/-m , --all/-a, --policy, --factory, --controller, 
 |    --controller --resource, -mcr (migration, resource controller with route model binding), -mcr --api, -mcr -R, -fs
-|  (factory and seeder)
+|  (factory and seeder), -crR(resource controller, request), -mfcs
 | 2. Overview of the Model: php artisan model:show User
 | 3. "Composite" primary keys are not supported by Eloquent models. 
+| 4. php artisan model:show User
 */
 
 use Illuminate\Database\Eloquent\Model;
