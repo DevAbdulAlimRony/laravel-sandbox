@@ -65,5 +65,16 @@
 //Using Default Page Title
 <title>{{ $page_title ?? "Default Page Title" }}</title>
 
+//Extending Blade Directives/Creating Custom Directives: Provide additional functionality to your views
+public function boot(){
+  Blade::directive('formatDate', function ($expression){
+    return "<?php echo ($expression)->format('F j, Y');
+     ?>";
+  });
+} //Now, in some blade view
+<p>Published On: @formatDate($news->publication_date)</p>
+
+
+
 
 
