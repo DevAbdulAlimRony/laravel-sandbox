@@ -18,16 +18,66 @@
 */
 
 class SendEmails extends Command{
-    protected $signature = 'mail:send {user}';
+    protected $signature = 'email:send {user}';
     protected $description = "Send a Email to a User";
+
     public function handle(DripEmailer $drip): void{
         $drip->send(User::find($this->argument('user')));
+        //or just do write logic as we do in controller
+        $this->info('success');
     }
 }
+
+class CreateUser extends Command{
+    //with parameters:  protected $signature = 'user:create {name} {email} {password}';
+    //with optional:  protected $signature = 'user:create {name} {email} {password?}';
+    //with Flag: 
+    protected $signature = 'user:create {--verified} {--name=} {--email=} {--password=}';
+
+    //command will be: php artisan user:create --name='a' --email='' --password='' --verified
+
+    protected $description = "Create a User";
+
+    public function handle(): void{
+        $name = $this->option('name'); //option instead of argument
+        $email = $this->option('email');
+        $password = $this->option('password') ?? Str::random(12);
+
+        User::create([
+            'name' => $name,
+            'email' => $email,
+            'password' => bcrypt($password),
+            'email_verified_at' => $this->option('verified') ? now() : null,
+        ]);
+        $this->info('success');
+    }
+}
+
+//Progressbar, Creating 10 Random Users like database factory seed
+class CreateUsers extends Command{
+    public function handle(){
+        $count = $this->option('count');
+
+        $bar = $this->output->createProgressBar($count);
+        $bar->start();
+        for($i=1;$i<=$count;$i++){
+            $name = Str::random(8);
+            User::create(['name' => $name,]);
+            $bar->advance();
+        }
+        $bar->finish();
+    }
+}
+
+
+
 
 Artisan::command('mail:send {user}', function (string $user){
     $this->info('Sending Email');
 });
+
+//Calling Command From Anywhere
+Artisan::call('user:create');
 
 //Isolated Command
 
