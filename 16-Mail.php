@@ -168,6 +168,8 @@ class User{
 //SMS Notification
 //Slack Notification(Real Time Communication)
 
+//Welcome Email 3 Ways: Notification, Observer, Events and Listeners
+
 
 
 
