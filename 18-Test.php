@@ -30,3 +30,9 @@ class UserTest extends TestCase{
     }
 }
 
+//Project with TDD
+
+//Mocking: Don't execute test like test controller, not the event for it.
+
+//Laravel Dusk: Easy to use browser automated testing API
+

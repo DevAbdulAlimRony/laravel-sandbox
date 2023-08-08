@@ -104,4 +104,6 @@ return User::select(['id', 'created_at'])->get()->map(function($user){
 */
 
 
+// API Documentation- OpenApi/Swagger, Beyondcode- Laravel api doc generator, Scribe
 
+//Passport: OAUTH2 Authentication
