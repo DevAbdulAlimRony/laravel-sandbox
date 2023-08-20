@@ -52,6 +52,10 @@ if(Auth::check()){}
 | 7. Middleware Sorting: app/http/kernel -> $middlewareProperty -> write classes serially
 | 8. Middleware Parameter: Like Check if User is teacher and also is a dean
 | 9. Terminable Middleware: terminate() method, Do/Response something after passing the middleware. Register it and assign into kernel.php
+| 10. We can create middleware in our controller's constructor for all methods of that controller
+| 11. Global middleware cannot be named
+| 12. Middleware can receive parameter also
+| 13. Serialization in middleware group has impacts like which will execute first over all.
 */
 public function IsTokenValid(Request $request, Closure $next): Response{
     if($request->input('token') != 'Abdul Alim'){
