@@ -172,17 +172,48 @@ $class = Relation::getMorphedModel($alias);
 | Accessor can work with multiple attributes fn(mixed, array) 
 | Caching: shouldCache(),withoutObjectCaching()
 | Mutator: Data Manipulation When it is set
+| Custom Cast: php artisan make:cast Json
 --------------------------------------------------------------------------
 */
 
 class User extends Model{
+    //Attribute Casting
+    protected $casts = [
+        'is_admin' => 'boolean', //Even you insert as integer, it will be accessed as boolean
+        'directory' => AsStringable::class,
+        'options' => 'array',
+        'created_at' => 'datetime:Y-m-d',
+        //Query, Encryption Casting
+    ]; 
+
+    protected function serializeDate(DateTimeInterface $date): string
+    {
+    return $date->format('Y-m-d');
+    }
+    protected $dateFormat = 'U';
+
+    //Mutators and Accessors
     protected function teacherName(): Attribute{
         return Attribute::make(
             get: fn (string $value) => ucfirst($value), //Accessor
             set: fn (string $value) => strtolower($value), //Mutator
-        );
+    );
+
+        return Attribute::make(
+            get: fn (mixed $value, array $attributes) => new Address(
+                $attributes['address_line_one'],
+                $attributes['address_line_two'],
+            ),
+            set: fn (Address $value) => [
+                'address_line_one' => $value->lineOne,
+                'address_line_two' => $value->lineTwo,
+            ],
+        )->shouldCache(); //withoutObjectCaching
     }
+
 }
+
+
 
 
 

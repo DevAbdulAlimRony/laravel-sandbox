@@ -71,7 +71,7 @@ protected $redirectRoute = 'dashboard'; //dashboard is the route name
 
 public function authorize(): bool{}
 protected function prepareForValidation(): void{
-    //Prepare data for Validation
+    //Prepare data before Validation
 }
 public function rules(): array{
     return ['title' => 'required'];
@@ -80,10 +80,10 @@ protected function passedValidation(): void{
    $this->replace['name' => 'Abdul'];
    $this->merge(['tags' => strtolower($this->tags)]);
 }
-public function messages: array{
+public function messages(): array{
     return ['title.required' => 'This is required'];
 }
-public function attributes: array{
+public function attributes(): array{
     return ['title' => 'name']; //previous: title is required, now: name is required
 }
 public function store(StoreUserRequest $request): RedirectResponse{

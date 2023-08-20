@@ -71,7 +71,7 @@ Route::domain('{account}.example.com')->group(function () {}); //Sub Domain Rout
 Route::prefix('admin')->group(function(){});
 Route::name('admin.')->group(function(){}); //domain(), resource(), apiResource()
 Route::middleware()->name()->prefix()->controller()->group(function(){
-
+    
 });
 
 //Organizing Routes: Public Route, Private Route as middleware grouped

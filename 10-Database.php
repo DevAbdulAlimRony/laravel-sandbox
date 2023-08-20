@@ -75,3 +75,14 @@ class UserFactory extends Factory{
 
 //Raw Expressions/Query
 $users = DB::table('users')->select(DB::raw('count(*) as user_count, status'))->get();
+
+/*
+|--------------------------------------------------------------------------
+| Factory Generator Package
+|--------------------------------------------------------------------------
+|
+| 1. Install: composer require thedoctor0/laravel-factory-generator --dev
+| 2. php artisan generate:factory
+| 3. php artisan generate:factory ModelName
+| 4. Overriding: --force
+*/
