@@ -1,0 +1,30 @@
+- CI/CD tools can help a team automate their development, deployment, and testing. CI/CD is a method to frequently deliver apps to customers by introducing automation into the stages of app development. The main concepts attributed to CI/CD are continuous integration, continuous delivery, and continuous deployment.
+
+- The "CI" in CI/CD always refers to continuous integration, which is an automation process for developers. Successful CI means new code changes to an app are regularly built, tested, and merged to a shared repository.
+
+- The "CD" in CI/CD refers to continuous delivery and/or continuous deployment, which are related concepts that sometimes get used interchangeably. Continuous delivery usually means a developer’s changes to an application are automatically bug tested and uploaded to a repository (like GitHub or a container registry), where they can then be deployed to a live production environment by the operations team. Continuous deployment (the other possible "CD") can refer to automatically releasing a developer’s changes from the repository to production, where it is usable by customers.
+
+- YAML is a human-readable data serialization language that is often used for writing configuration files. Serialization is a process where one application or service that has different data structures and is written in a different set of technologies can transfer data to another application using a standard format. XML, JSON, and YAML are all used for creating configuration files and transferring data between applications. Depending on whom you ask, YAML stands for yet another markup language or YAML ain't markup language (a recursive acronym), which emphasizes that YAML is for data, not documents. It can also be used in conjunction with other programming languages. Because of its flexibility and accessibility, YAML is used by the Ansible automation tool to create automation processes, in the form of Ansible Playbooks. YAML is also a superset of JSON, so JSON files are valid in YAML and they use Python-style indentation to determine the structure and indicate nesting. Comments can be identified with a pound or hash symbol (#). 3 dashes (---) are used to signal the start of a document, while each document ends with three dots (...).
+
+                                        
+                                        
+ --- Github Actions can be used in this scenario ---
+
+    - Github Action is a feature to create custom automated workflows or to automate software development lifecycle(SDLC) workflows
+    - Steps:
+    1. Go to the github repository
+    2. In the repo, create folder .github/workflows
+    3. File will be as .yml
+    4. Add content/code in the workflow files.
+    5. commit and push changes
+    6. Go to Actions Tab and from left sidebar view logs and results
+    - Workflow is a collection of jobs. It can have name, event(any activity in the repo that can trigger a workflow), jobs(collection of steps), chain jobs
+
+
+- Workflows are custom automated processes that you can set up in your repository to build, test, package, release, or deploy any project on Github. A workflow is defined within the repository and committed as part of the repository. When you commit a workflow and push to GitHub, GitHub Actions will automatically detect the workflow and immediately parse the workflow and start processing your CI/CD process based on the instruction defined there. 
+
+- In most cases, we will want to ensure our project is fine whenever a change is made to the source code. This is usually done using tests that ensure no part of the project is broken because of any change. To do this, here is what our initial workflow will look like: https://blog.logrocket.com/how-to-create-a-ci-cd-for-a-laravel-application-using-github-actions/
+
+- CI/CD using amazon EC2, Docker, Jenkins, Github Action: https://faun.pub/configure-laravel-8-for-ci-cd-with-jenkins-and-github-part-1-58b9be304292
+
+        
