@@ -113,3 +113,57 @@ Route::post('/email/verification-notification', function (Request $request) {
 | 1. Social Login: Laravel supports facebook, twitter, linkedin, google, github, gitlab, bitbucket, slack
 | 2. composer require laravel/socialite
 */
+
+/*
+|--------------------------------------------------------------------------
+| Sanctum
+| (We should not use API tokens to authenticate our own first-party SPA. Instead, use Sanctum's built-in SPA   authentication features.)
+|--------------------------------------------------------------------------
+|
+| 1. Laravel Sanctum provides a featherweight authentication system for SPAs (single page applications), mobile applications, and simple, token based APIs.
+| 2. If not installed automatically, composer require laravel/sanctum
+| 3. php artisan vendor:publish --provider="Laravel\Sanctum\SanctumServiceProvider"
+| 4. If we use SPA, assign middleware in kernel
+| 5. We can stop default migration in App Service Provider- Sanctum::ignoreMigrations
+| 6. Custom PersonalAccessTokenModel and register it into boot()
+| 7. User Model-  use HasApiTokens
+| 8. API tokens are hashed using SHA-256 hashing 
+| 9. By default, Sanctum tokens never expire
+*/
+
+Route::middleware('auth:sanctum');
+//Creating Token
+$token = $request->user()->createToken($request->token_name);
+return ['token' => $token->plainTextToken];
+
+//Access all user's token
+foreach ($user->tokens as $token) {} //use HasApiTokens Trait
+
+//Token abilities(Like Permission)
+return $user->createToken('token-name', ['server:update'])->plainTextToken;
+if ($user->tokenCan('server:update')) {}
+
+//Abilities middleware[Register in kernel]
+middleware(['auth:sanctum', 'abilities:check-status,place-orders']);
+
+// Revoke all tokens...
+$user->tokens()->delete();
+
+// Revoke the token that was used to authenticate the current request...
+$request->user()->currentAccessToken()->delete();
+ 
+// Revoke a specific token...
+$user->tokens()->where('id', $tokenId)->delete();
+
+//Token Expiration set in sanctum configuration file: 'expiration' => 525600
+$schedule->command('sanctum:prune-expired --hours=24')->daily(); //delete all expired token scheduling
+
+//SPA Authentication: For this feature, Sanctum does not use tokens of any kind. Instead, Sanctum uses Laravel's built-in cookie based session authentication services. In order to authenticate, SPA and API must share the same top-level domain. However, they may be placed on different subdomains. 
+/* 
+1. Configure Domain
+2. Assign Middleware in kernel for api.php
+3. if different subdomain, setup cors and cookies
+4. Authenticating by Axios
+5. Login Controller manually or using fortify
+*/
+
