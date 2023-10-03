@@ -26,8 +26,7 @@ Some Patterns in Laravel
 //Try to Understand how all patterns work in laravel.
 
 /*
-Adapter Pattern
-    
+Adapter Pattern   
 */
 
 //Laravel Eloquent already a repository pattern, so it is bad practice to use repository pattern again. Its like over-engineering.
@@ -64,5 +63,6 @@ Loose Coupling Aspect 4 - Event-Based Communication:
     Instead of directly interacting with each other, these controllers can communicate through events and listeners in Laravel.
     For example, when a product is added to the cart in the ShoppingCartController, it can trigger an event (e.g., ProductAddedToCart).
     The ProductController can listen for this event and take any necessary actions (e.g., updating product availability). */
+
 
 

@@ -1,9 +1,11 @@
 <?php
+use Illuminate\Support\Facades\Route;
+//Web middleware group provides session state and CSRF protection
 //Basic Route: Accept a URL and a Closure
 Route::get('/', function () {
     return view('welcome');
 });
-Route::match(['get', 'post'], '/welcome', 'WelcomeController@index');
+Route::match(['get', 'post'], '/welcome', 'WelcomeController@index'); //any
 
 //Fallback Route
 Route::fallback(function () {});
@@ -109,14 +111,16 @@ Route::get('/', function (){})->withTrashed();
 | 4. We can conditionally make our own customized route model binding like find this id if condition
 */
 //Implicit Binding
+//automatically bind where variable name compares with model name
 Route::get('users/{user}', function(User $user){}); //$user and {user} matches, withTrashed() for Soft Delete
 Route::get('users/{user:slug}', function(User $user){return $user;}); //Rather than ID - slug. If Define in Model, don't need :slug here
 Route::get('users/{user}/posts/{post:slug}', function(User $user, Post $post){}); //Gradually User, and the Post for relationship
-Route::get('users/{user}/posts/{post:slug}', function(User $user, Post $post){})->scopBindings(); //Scop Child Bindings, withoutScopBindings()
+Route::get('users/{user}/posts/{post:slug}', function(User $user, Post $post){})->scopBindings(); //Scope Child Bindings, withoutScopBindings()
 Route::scopBindings()->group(function(){});
 Route::get('users/{user}', [LocationController::class, 'show'])->missing(function (Request $request){
-    return Redirect::route('error.index');
+    return Redirect::route('error.index'); //if route model binding's model not found or missing
 });
+//Route::model(), own binding resolution logic: Route::bind(), If we want to pass a column as a parameter rather than id , In model-  getRouteKeyName()
 
 //Rate Limiting:Restrict amount of traffic for a given route/routes (RouteServiceProvider)
 //If exceed, 429 status code
@@ -135,6 +139,8 @@ RateLimiter::for('uploads', function(Request $request){
 
 //Assign Rate Limiter to Route
 Route::middleware(['throttle:uploads']);
+
+//Accessing Current Route from Route Facade: Route:current(), Route:currentRouteName(), Route:currentRouteAction()
 
 
 
