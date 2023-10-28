@@ -188,7 +188,7 @@ class User extends Model{
 
     protected function serializeDate(DateTimeInterface $date): string
     {
-    return $date->format('Y-m-d');
+        return $date->format('Y-m-d');
     }
     protected $dateFormat = 'U';
 
@@ -212,6 +212,7 @@ class User extends Model{
     }
 
 }
+
 
 
 

@@ -1,6 +1,6 @@
 <?php
 //Laravel Blade Templating Engine
-//Eco Vars and Methods 
+//Echo Vars and Methods
 {{ $name }}
 {{ time() }}
 {!! Escaped Data !!}

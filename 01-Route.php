@@ -1,6 +1,7 @@
 <?php
 use Illuminate\Support\Facades\Route;
 //Web middleware group provides session state and CSRF protection
+//Cross-Site Request Forgery (CSRF) is an attack that forces authenticated users to submit a request to a Web application against which they are currently authenticated.
 //Basic Route: Accept a URL and a Closure
 Route::get('/', function () {
     return view('welcome');
@@ -66,6 +67,7 @@ Route::get('/search/{search}', function (string $search) {
     return $search;
 })->where('search', '.*');
 
+
 //Route Grouping
 Route::middleware(['admin'])->group(function(){});
 Route::controller(AdminController::class)->group(function(){});
@@ -75,7 +77,6 @@ Route::name('admin.')->group(function(){}); //domain(), resource(), apiResource(
 Route::middleware()->name()->prefix()->controller()->group(function(){
     
 });
-
 //Organizing Routes: Public Route, Private Route as middleware grouped
 //If controllers in the separate folder, that can be called as namespace
 
@@ -100,6 +101,7 @@ Route::group(['middleware'=>'auth'], function(){
 //Soft Delete
 Route::get('/', function (){})->withTrashed();
 
+
 /*
 |--------------------------------------------------------------------------
 | Route Model Binding
@@ -120,6 +122,12 @@ Route::scopBindings()->group(function(){});
 Route::get('users/{user}', [LocationController::class, 'show'])->missing(function (Request $request){
     return Redirect::route('error.index'); //if route model binding's model not found or missing
 });
+//Scoped bindings" in Laravel limit data retrieval to a specific context, for instance, getting posts that belong to a particular user. With ->scopeBindings(), Laravel only finds a Post that is related to the provided User, otherwise, it returns a 404 error. Without scoped bindings (without ->scopeBindings()), Laravel will fetch a Post based on its ID across all posts, regardless of the user it's related to. It broadens the search to the entire dataset, ignoring the user-post relationship.
+//In Model
+    public function resolveRouteBinding($value, $field = null)
+    {
+        return $this->where('slug', $value)->firstOrFail();
+    }
 //Route::model(), own binding resolution logic: Route::bind(), If we want to pass a column as a parameter rather than id , In model-  getRouteKeyName()
 
 //Rate Limiting:Restrict amount of traffic for a given route/routes (RouteServiceProvider)

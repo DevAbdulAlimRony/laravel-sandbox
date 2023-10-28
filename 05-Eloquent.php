@@ -1,7 +1,7 @@
 <?php
 /*
 |--------------------------------------------------------------------------
-| ORM: Object Relational Model
+| ORM: Object Relational Mapping
 |--------------------------------------------------------------------------
 |
 | 1. Model with Migration: php artisan make:model User -migration/-m , --all/-a, --policy, --factory, --controller, 
@@ -45,7 +45,7 @@ User::where('is_admin', true)
     ->chunkById(200, function (Collection $users) {
         $users->each->update(['is_admin' => false]);
 }, $column = 'id');
-//Use Lazy Loading: Load what needs
+//Use Lazy Loading: Load what needs (In Details)
 
 //Refreshing Model
 $userFresh = $user1->fresh();
@@ -324,4 +324,6 @@ $employees->reject(function($employee) {
 // After using Higher Order Messaging for Collections
 $employees->reject->retired->each->sendPayment();
 $totalAmount = $orders->sum->amount;
+
+//Serialization
 
