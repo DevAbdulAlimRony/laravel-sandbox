@@ -59,4 +59,6 @@ print_r($container->make('Game'));
 //Observe All Service Providers
 //Helper Functions
 
+//Laravel Tinker Practice Must (CRUD and all)
+
 ?>
